@@ -4,13 +4,30 @@
     <script type="text/javascript" src="neuronal.js"></script>
     <script>
       window.onload = function(){
-        var neuronal = new Neuronal();
-        neuronal.weightStep();
-        neuronal.weightStep();
-        neuronal.weightStep();
-        neuronal.errorStep();
-        neuronal.errorStep();
-        neuronal.errorStep();
+        var neuronal = new Neuronal(new Matrix([[3, 5], [5, 1], [10, 2]]),
+                                    new Matrix([[-0.75],[-0.82],[-0.93]]),
+                                    [new Matrix(2,3), new Matrix(3, 1)].map(function(a){ return a.setRandom(); }));
+        var step1 = neuronal.weightStep();
+        console.log("Weight Step " + (neuronal.currentStep - 1) + ": \n" + step1.weight.toString());
+        console.log("Sigmoid Step " + (neuronal.currentStep - 1) + ": \n" + step1.sigmoid.toString());
+
+        var step2 = neuronal.weightStep();
+        console.log("Weight Step " + (neuronal.currentStep - 1) + ": \n" + step2.weight.toString());
+        console.log("SigmoidStep " + (neuronal.currentStep - 1) + ": \n" + step2.sigmoid.toString());
+
+        var error1 = neuronal.errorStep();
+        console.log("Partial Error Weight_" + (neuronal.currentStep) + ":\n" + error1.toString());
+        var error2 = neuronal.errorStep();
+        console.log("Partial Error Weight_" + (neuronal.currentStep) + ":\n" + error2.toString());
+
+        var grad1 = neuronal.error_gradient();
+        console.log("Gradient Vector: \n" + grad1.toString());
+        var grad2 = neuronal.numer_gradient();
+        console.log("Numerical Gradient Vector: \n" + grad2.toString());
+        console.log(grad1, grad2);
+
+        var diff = (grad2.add(grad1.scalar(-1))).norm() / (grad2.add(grad1)).norm();
+        console.log("The final error cost is: " + diff);
       };
     </script>
   </head>

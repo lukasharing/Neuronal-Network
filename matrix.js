@@ -25,6 +25,7 @@ class Matrix{
 	get(x, y){ return this.values[y][x]; };
 	isSquare(){ return this.rows == this.colls; };
 	equal(m){ return this.rows == m.rows && this.colls == m.colls; };
+	dimensions(){ return this.rows * this.colls; };
 
 	clone(){
 		var clon = new Matrix(this.rows, this.colls);
@@ -57,6 +58,15 @@ class Matrix{
 			for(let x = 0; x < this.colls; x++){
 				var random = Math.random() * (max - min) + min;
 				this.set(x, y, round ? Math.round(random) : random);
+			}
+		}
+		return this;
+	};
+
+	setZero(){
+		for(let y = 0; y < this.rows; y++){
+			for(let x = 0; x < this.colls; x++){
+				this.set(x, y, 0);
 			}
 		}
 		return this;
@@ -146,6 +156,62 @@ class Matrix{
 			}
 		}
 		return result;
+	};
+
+	ravel(){
+		var raveled = new Matrix(1, this.dimensions());
+		for(let j = 0; j < this.rows; j++){
+			for(let i = 0; i < this.colls; i++){
+				raveled.set(i + j * this.colls, 0, this.get(i, j));
+			}
+		}
+		return raveled;
+	};
+
+	concat(m){
+		console.log(this.rows, m.rows);
+		if(this.rows == 1 && m.rows == 1){
+			var concat = new Matrix(1, this.colls + m.colls);
+			for(let i = 0; i < this.colls; i++){
+				concat.set(i, 0, this.get(i, 0));
+			}
+			for(let i = 0; i < m.colls; i++){
+				concat.set(this.colls + i, 0, m.get(i, 0));
+			}
+			return concat;
+		}else{
+			console.error("Both matrices have to be an 1D arrays, try to revel them!");
+		}
+	}
+
+	norm(){
+		var value = 0;
+		for(let j = 0; j < this.rows; j++){
+			for(let i = 0; i < this.colls; i++){
+				value += Math.pow(this.get(i, j), 2);
+			}
+		}
+		return Math.sqrt(value);
+	};
+
+	pow(a){
+		var result = new Matrix(this.rows, this.colls);
+		for (let y = 0; y < this.rows; y++){
+			for (let x = 0; x < this.colls; x++){
+				result.set(x, y, Math.pow(this.get(x, y), 2));
+			}
+		}
+		return result;
+	};
+
+	sum(){
+		var value = 0;
+		for(let j = 0; j < this.rows; j++){
+			for(let i = 0; i < this.colls; i++){
+				value += this.get(i, j);
+			}
+		}
+		return value;
 	};
 
 	/* TODO: Determinant of the current matrix */
