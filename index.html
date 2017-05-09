@@ -1,11 +1,16 @@
 <html>
   <head lang="es">
-    <script src="matrix.js"></script>
-    <scirpt src="neuronal.js"></script>
+    <script type="text/javascript" src="matrix.js"></script>
+    <script type="text/javascript" src="neuronal.js"></script>
     <script>
       window.onload = function(){
         var neuronal = new Neuronal();
-
+        neuronal.weightStep();
+        neuronal.weightStep();
+        neuronal.weightStep();
+        neuronal.errorStep();
+        neuronal.errorStep();
+        neuronal.errorStep();
       };
     </script>
   </head>

@@ -24,6 +24,17 @@ class Matrix{
 	set(x, y, v){ this.values[y][x] = v; };
 	get(x, y){ return this.values[y][x]; };
 	isSquare(){ return this.rows == this.colls; };
+	equal(m){ return this.rows == m.rows && this.colls == m.colls; };
+
+	clone(){
+		var clon = new Matrix(this.rows, this.colls);
+		for(let j = 0; j < this.rows; j++){
+			for(let i = 0; i < this.colls; i++){
+				clon.set(i, j, this.get(i, j));
+			}
+		}
+		return clon;
+	};
 
 	setIdentity(){
 		if(this.isSquare()){
@@ -52,8 +63,7 @@ class Matrix{
 	};
 
 	add(m){
-		if(	this.rows == m.rows &&
-				this.colls == m.colls ){
+		if(	this.equal(m) ){
 			var result = new Matrix(this.rows, this.colls);
 			for (let y = 0; y < this.rows; y++){
 				for (let x = 0; x < this.colls; x++){
@@ -64,6 +74,16 @@ class Matrix{
 		}else{
 			console.error("Both matrices have to have the same dimensions.");
 		}
+	};
+
+	scalar(n){
+		var scalated = new Matrix(this.rows, this.colls);
+		for(let j = 0; j < this.rows; j++){
+			for(let i = 0; i < this.colls; i++){
+				scalated.set(i, j, this.values[j][i] * n);
+			}
+		}
+		return scalated;
 	};
 
 	dot(m){
@@ -81,6 +101,20 @@ class Matrix{
 			return result;
 		}else{
 			console.error("The number of the lefside Matrix colls does'nt match to the number of rows from the rightside Matrix.");
+		}
+	};
+
+	multiply(m){
+		if (this.equal(m)){
+			let result = new Matrix(this.rows, this.colls);
+			for (let y = 0; y < this.rows; y++){
+				for (let x = 0; x < this.colls; x++){
+					result.set(x, y, this.get(x, y) * m.get(x, y));
+				}
+			}
+			return result;
+		}else{
+			console.error("Both matrices have to have the same dimensions.");
 		}
 	};
 
