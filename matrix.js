@@ -46,7 +46,7 @@ class Matrix{
 			}
 			return this;
 		}else{
-			console.log("The matrix has to be square.");
+			console.error("The matrix has to be square.");
 		}
 	};
 
@@ -169,7 +169,6 @@ class Matrix{
 	};
 
 	concat(m){
-		console.log(this.rows, m.rows);
 		if(this.rows == 1 && m.rows == 1){
 			var concat = new Matrix(1, this.colls + m.colls);
 			for(let i = 0; i < this.colls; i++){
