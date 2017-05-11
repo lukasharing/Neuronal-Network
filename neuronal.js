@@ -75,12 +75,11 @@ class Neuronal{
     }
     let laststep  = c < 1 ? this.input : this.sigmaSteps[c - 1];
     let partial   = this.partialError[c] = laststep.transpose().dot(sigma);
-    console.log(this.partialError);
     return partial;
   };
 
   error_cost(){
-    return 0.5 * this.output.add(this.weightSteps[this.weightSteps.length - 1].scalar(-1)).pow(2).sum();
+    return 0.5 * this.output.add(this.sigmaSteps[this.sigmaSteps.length - 1].scalar(-1)).pow(2).sum();
   };
 
   error_gradient(){
@@ -95,9 +94,12 @@ class Neuronal{
     let epsilon       = 1e-4;
     this.weights.forEach(function(a){ total_weights += a.rows * a.colls; });
 
+    /* New subneuronal with small increment of the weights. */
     let currentMatrix = 0;
-    let copy_weights = this.weights.slice(0);
+    let copy_weights = [];
+    this.weights.forEach(function(a){ copy_weights.push(a.clone()); });
     let neuronal = new Neuronal(this.input.clone(), this.output.clone(), copy_weights);
+
     let error = new Matrix(1, total_weights);
     console.log("-------------------------------------* Calculating Errors.");
     for(let i = 0, m = 0; i < total_weights; i++){
@@ -109,7 +111,6 @@ class Neuronal{
       neuronal.nextStep();
       neuronal.nextStep();
       let cost1  = neuronal.error_cost();
-
       neuronal.new();
       current.set(x, y, current.get(x, y) - 2 * epsilon);
       neuronal.nextStep();
@@ -117,7 +118,8 @@ class Neuronal{
       let cost2  = neuronal.error_cost();
       error.set(i, 0, (cost1 - cost2) / ( 2 * epsilon ));
 
-      current.set(x, y, current.get(x, y) + 2 * epsilon);
+      current.set(x, y, this.weights[currentMatrix].get(x, y));
+
       if(i - m + 1 >= dimension){
         currentMatrix++;
         m += dimension;
