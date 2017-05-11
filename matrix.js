@@ -63,7 +63,7 @@ class Matrix{
 		return this;
 	};
 
-	setZero(){
+	setZeros(){
 		for(let y = 0; y < this.rows; y++){
 			for(let x = 0; x < this.colls; x++){
 				this.set(x, y, 0);
